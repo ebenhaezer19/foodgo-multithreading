@@ -280,11 +280,6 @@ gofood-multithreading/
 
 ---
 
-## 📞 Kontak
-Untuk pertanyaan atau diskusi, hubungi anggota tim melalui GitHub issues atau grup WhatsApp.
-
----
-
 ## 📄 License
 Educational Project - Operating Systems Course
 

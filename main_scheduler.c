@@ -60,13 +60,10 @@ void simulate_rr(Task src[], int n, int quantum) {
     int completed = 0;
     int queue[NUM_TASK];
     int front = 0, rear = 0;
-    int in_queue[NUM_TASK] = {0};
-    int completion_time[NUM_TASK] = {0};
 
     // Masukkan semua task ke queue
     for (int i = 0; i < n; i++) {
         queue[rear++] = i;
-        in_queue[i] = 1;
     }
 
     printf("Gantt Chart RR (quantum=%d): ", quantum);
@@ -75,7 +72,6 @@ void simulate_rr(Task src[], int n, int quantum) {
         if (front == rear) break;
         
         int idx = queue[front++];
-        in_queue[idx] = 0;
 
         if (tasks[idx].remaining > 0) {
             int exec_time = (tasks[idx].remaining > quantum) ? quantum : tasks[idx].remaining;
@@ -87,13 +83,11 @@ void simulate_rr(Task src[], int n, int quantum) {
 
             if (tasks[idx].remaining == 0) {
                 completed++;
-                completion_time[idx] = time;
                 tasks[idx].turnaround = time;
                 tasks[idx].waiting = tasks[idx].turnaround - tasks[idx].burst;
             } else {
                 // Masukkan kembali ke queue
                 queue[rear++] = idx;
-                in_queue[idx] = 1;
             }
         }
     }

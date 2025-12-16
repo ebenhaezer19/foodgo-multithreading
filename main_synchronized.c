@@ -11,6 +11,7 @@ int front = 0, rear = 0;
 
 int payment_status[TOTAL_ORDER];
 int stock = 100; // contoh stok bahan
+int total_revenue = 0; // total pendapatan
 
 pthread_mutex_t mutex_queue;
 pthread_mutex_t mutex_stock;
@@ -48,7 +49,12 @@ void* payment_thread(void* arg) {
     for (int i = 0; i < TOTAL_ORDER; i++) {
         pthread_mutex_lock(&mutex_payment);
         payment_status[i] = 1;  // payment OK
-        printf("[Payment] Order %d dibayar\n", i);
+        
+        // Calculate revenue
+        int amount = 25000 + (rand() % 25000); // 25k-50k
+        total_revenue += amount;
+        
+        printf("[Payment] Order %d dibayar (Rp %d) - Total Revenue: Rp %d\n", i, amount, total_revenue);
         pthread_cond_broadcast(&cond_payment); // signal payment OK
         pthread_mutex_unlock(&mutex_payment);
         usleep(10000);
@@ -207,11 +213,13 @@ int main() {
     pthread_join(printThread, NULL);
 
     printf("\n========================================\n");
-    printf("         SELESAI!\n");
+    printf("         FINAL STATISTICS\n");
     printf("========================================\n");
-    printf("Total Orders: %d\n", TOTAL_ORDER);
-    printf("Completed: %d\n", completed);
+    printf("Total Orders Processed: %d\n", completed);
+    printf("Expected Orders: %d\n", TOTAL_ORDER);
+    printf("Total Revenue: Rp %d\n", total_revenue);
     printf("Final Stock: %d\n", stock);
+    printf("Expected Stock: %d\n", 100 - TOTAL_ORDER);
     printf("========================================\n");
     
     pthread_mutex_destroy(&mutex_queue);
